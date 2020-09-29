@@ -1,10 +1,21 @@
 #include<stdio.h>
+#include<stdlib.h>
 
 int num;
-enum {NULL, NUMBER, PLUS, STAR, LP, RP, END} token;
+enum {NuLL, NUMBER, PLUS, STAR, LP, RP, END} token;
+
+
+int expression();
+int term();
+int factor();
+void get_token();
+void error(int i);
+
 
 void main(){
 	int result;
+	printf("수식을 입력하십시오 : ");
+
 	get_token();
 	result = expression();
 	
@@ -21,7 +32,7 @@ int expression(){
 		result = result+term();
 	}
 	
-	return(resulr);
+	return(result);
 }
 
 int term(){
@@ -30,7 +41,7 @@ int term(){
 
 	while(token == STAR){
 		get_token();
-		result = result*factor()
+		result = result*factor();
 	}
 
 	return(result);
@@ -55,14 +66,29 @@ int factor(){
 }
 
 void get_token(){
+	char ch;
+	ch = getchar();
 
+	if('0'<=ch && ch<='9'){
+		token = NUMBER;
+	}
+	else{
+		switch(ch){
+			case '+': token = PLUS; break;
+			case '*': token = STAR; break;
+			case '(': token = LP;   break;
+			case ')': token = RP;   break;
+			case'\n': token = END;  break;
+			default : token = NuLL; break;
+		}
+	}
 }
 
 void error(int i){
 	switch(i){
-		case 1 : print("error1\n"); break;
-		case 2 : print("error2\n"); break;
-		case 3 : print("error3\n"); break;
+		case 1 : printf("error1\n"); break;
+		case 2 : printf("error2\n"); break;
+		case 3 : printf("error3\n"); break;
 	}
 	exit(1);
 }
