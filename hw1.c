@@ -1,7 +1,8 @@
 #include<stdio.h>
-#include<stdlib.h>
+#include<stdlib.h> // can function atoi()
 
 int num;
+char str[100];
 enum {NuLL, NUMBER, PLUS, STAR, LP, RP, END} token;
 
 
@@ -50,37 +51,54 @@ int term(){
 int factor(){
 	int result;
 
-	if(token == NUMBER){
 		result = num;
 		get_token();
 	}
 	else if(token == LP){
 		get_token();
 		result = expression();
-		if(token == RP) get_token();
-		else error(2);
+
+		if(token == RP){
+			get_token();
+		}
+		else {
+			error(2);
+		}
 	}
-	else error(1);
+	else {
+		error(1);
+	}
 
 	return(result);
 }
 
 void get_token(){
-	char ch;
-	ch = getchar();
+	char ch = ' ';
+	int i = 0;
 
-	if('0'<=ch && ch<='9'){
-		token = NUMBER;
-	}
-	else{
-		switch(ch){
-			case '+': token = PLUS; break;
-			case '*': token = STAR; break;
-			case '(': token = LP;   break;
-			case ')': token = RP;   break;
-			case'\n': token = END;  break;
-			default : token = NuLL; break;
+	do{
+		ch = getchar();
+		printf("%c\n", ch);
+
+		if('0'<=ch && ch<='9'){
+			token = NUMBER;	
+			str[i++] = ch; 
 		}
+		else{
+			switch(ch){
+				case '+': token = PLUS; printf("plus\n"); break;
+				case '*': token = STAR; printf("star\n"); break;
+				case '(': token = LP;   printf("LP\n");   break;
+				case ')': token = RP;   printf("RP\n");   break;
+				case'\n': token = END;  printf("END\n");  break;
+				default : token = NuLL; break;
+			}
+		}
+	}while(token == NUMBER);
+
+	if(token == NUMBER)	{
+		num = atoi(str);
+		printf("%d\n", num);
 	}
 }
 
