@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h> // can function atoi()
+#include<ctype.h> // can function isdigit()
 
 int num;
 char str[100];
@@ -9,7 +10,7 @@ enum {NuLL, NUMBER, PLUS, STAR, LP, RP, END} token;
 int expression();
 int term();
 int factor();
-void get_token();
+int get_token();
 void error(int i);
 
 
@@ -51,6 +52,7 @@ int term(){
 int factor(){
 	int result;
 
+	if(token == NUMBER){
 		result = num;
 		get_token();
 	}
@@ -72,34 +74,42 @@ int factor(){
 	return(result);
 }
 
-void get_token(){
-	char ch = ' ';
+int get_token(){
+	char ch =' ';
 	int i = 0;
 
-	do{
+	while(ch == ' ' || ch == '\t'){
 		ch = getchar();
-		printf("%c\n", ch);
-
-		if('0'<=ch && ch<='9'){
-			token = NUMBER;	
-			str[i++] = ch; 
-		}
-		else{
-			switch(ch){
-				case '+': token = PLUS; printf("plus\n"); break;
-				case '*': token = STAR; printf("star\n"); break;
-				case '(': token = LP;   printf("LP\n");   break;
-				case ')': token = RP;   printf("RP\n");   break;
-				case'\n': token = END;  printf("END\n");  break;
-				default : token = NuLL; break;
-			}
-		}
-	}while(token == NUMBER);
-
-	if(token == NUMBER)	{
-		num = atoi(str);
-		printf("%d\n", num);
 	}
+
+	if(isdigit(ch)){
+		do{
+			str[i++] = ch;
+			ch = getchar();
+		}while(isdigit(ch));
+	}
+	else if(ch == '\n'){
+		return END;
+	}
+	else if(ch == '+'){
+		ch = getchar();
+		return PLUS;
+	}
+	else if(ch == '*'){
+		ch = getchar();
+		return STAR;
+	}
+	else if(ch == '('){
+		ch = getchar();
+		return LP;
+	}
+	else if(ch == ')'){
+		ch = getchar();
+		return RP;
+	}
+	num = atoi(str);
+	printf("%d\n", num);
+	return NUMBER;
 }
 
 void error(int i){
