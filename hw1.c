@@ -3,8 +3,7 @@
 #include<ctype.h> // can function isdigit()
 
 int num;
-char str[100];
-enum {NuLL, NUMBER, PLUS, STAR, LP, RP, END} token;
+enum { NuLL, NUMBER, PLUS, STAR, LP, RP, END } token;
 
 
 int expression();
@@ -14,53 +13,53 @@ int get_token();
 void error(int i);
 
 
-void main(){
+void main() {
 	int result;
 	printf("수식을 입력하십시오 : ");
 
 	get_token();
 	result = expression();
-	
-	if(token != END) error(3);
+
+	if (token != END) error(3);
 	else printf("%d\n", result);
 }
 
-int expression(){
+int expression() {
 	int result;
 	result = term();
 
-	while(token == PLUS){
+	while (token == PLUS) {
 		get_token();
-		result = result+term();
+		result = result + term();
 	}
-	
+
 	return(result);
 }
 
-int term(){
+int term() {
 	int result;
 	result = factor();
 
-	while(token == STAR){
+	while (token == STAR) {
 		get_token();
-		result = result*factor();
+		result = result * factor();
 	}
 
 	return(result);
 }
 
-int factor(){
+int factor() {
 	int result;
 
-	if(token == NUMBER){
+	if (token == NUMBER) {
 		result = num;
 		get_token();
 	}
-	else if(token == LP){
+	else if (token == LP) {
 		get_token();
 		result = expression();
 
-		if(token == RP){
+		if (token == RP) {
 			get_token();
 		}
 		else {
@@ -74,50 +73,50 @@ int factor(){
 	return(result);
 }
 
-int get_token(){
-	char ch =' ';
+int get_token() {
+	char ch = ' ';
+	char str[100] = { 0 };
 	int i = 0;
 
-	while(ch == ' ' || ch == '\t'){
+	while (ch == ' ' || ch == '\t') {
 		ch = getchar();
 	}
 
-	if(isdigit(ch)){
-		do{
+	if (isdigit(ch)) {
+		do {
 			str[i++] = ch;
 			ch = getchar();
-		}while(isdigit(ch));
+		} while (isdigit(ch));
 	}
-	else if(ch == '\n'){
-		return END;
+	else if (ch == '\n') {
+		return token = 6;
 	}
-	else if(ch == '+'){
+	else if (ch == '+') {
 		ch = getchar();
-		return PLUS;
+		return token = 2;
 	}
-	else if(ch == '*'){
+	else if (ch == '*') {
 		ch = getchar();
-		return STAR;
+		return token = 3;
 	}
-	else if(ch == '('){
+	else if (ch == '(') {
 		ch = getchar();
-		return LP;
+		return token = 4;
 	}
-	else if(ch == ')'){
+	else if (ch == ')') {
 		ch = getchar();
-		return RP;
+		return token = 5;
 	}
+
 	num = atoi(str);
-	printf("%d\n", num);
-	return NUMBER;
+	return token = 1;
 }
 
-void error(int i){
-	switch(i){
-		case 1 : printf("error1\n"); break;
-		case 2 : printf("error2\n"); break;
-		case 3 : printf("error3\n"); break;
+void error(int i) {
+	switch (i) {
+	case 1: printf("error1\n"); break;
+	case 2: printf("error2\n"); break;
+	case 3: printf("error3\n"); break;
 	}
 	exit(1);
 }
-
